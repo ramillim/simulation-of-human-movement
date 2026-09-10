@@ -11,7 +11,7 @@ namespace Simulation.EditModeTests
         [Test]
         public void Compute_WithZeroAngles_ReturnsIdentity()
         {
-            var matrix = MatrixTransformMath.Compute(0f, 0f, 0f);
+            var matrix = MatrixTransformMath.ComputeRotationMatrix(0f, 0f, 0f);
 
             AssertMatrixApproximatelyEqual(Matrix4x4.identity, matrix);
         }
@@ -58,7 +58,7 @@ namespace Simulation.EditModeTests
             const float z = 60f;
 
             var expected = AxisX(x) * AxisY(y) * AxisZ(z);
-            var actual = MatrixTransformMath.Compute(x, y, z);
+            var actual = MatrixTransformMath.ComputeRotationMatrix(x, y, z);
 
             AssertMatrixApproximatelyEqual(expected, actual);
         }
@@ -66,11 +66,18 @@ namespace Simulation.EditModeTests
         [Test]
         public void Compute_IsNotCommutative()
         {
-            var xThenY = MatrixTransformMath.Compute(90f, 0f, 0f) * MatrixTransformMath.Compute(0f, 90f, 0f);
-            var yThenX = MatrixTransformMath.Compute(0f, 90f, 0f) * MatrixTransformMath.Compute(90f, 0f, 0f);
+            var xThenY =
+                MatrixTransformMath.ComputeRotationMatrix(90f, 0f, 0f)
+                * MatrixTransformMath.ComputeRotationMatrix(0f, 90f, 0f);
+            var yThenX =
+                MatrixTransformMath.ComputeRotationMatrix(0f, 90f, 0f)
+                * MatrixTransformMath.ComputeRotationMatrix(90f, 0f, 0f);
 
-            Assert.That(ApproximatelyEqual(xThenY, yThenX), Is.False,
-                "Rotations about different axes should not commute");
+            Assert.That(
+                ApproximatelyEqual(xThenY, yThenX),
+                Is.False,
+                "Rotations about different axes should not commute"
+            );
         }
 
         [Test]
@@ -84,7 +91,7 @@ namespace Simulation.EditModeTests
         }
 
         private static Vector3 Rotate(Vector3 point, float x, float y, float z) =>
-            MatrixTransformMath.Compute(x, y, z).MultiplyPoint3x4(point);
+            MatrixTransformMath.ComputeRotationMatrix(x, y, z).MultiplyPoint3x4(point);
 
         private static Matrix4x4 AxisX(float degrees)
         {
@@ -134,15 +141,21 @@ namespace Simulation.EditModeTests
         {
             for (var i = 0; i < 16; i++)
             {
-                Assert.That(actual[i], Is.EqualTo(expected[i]).Within(Tolerance),
-                    $"Element {i} differs. Expected:\n{expected}\nActual:\n{actual}");
+                Assert.That(
+                    actual[i],
+                    Is.EqualTo(expected[i]).Within(Tolerance),
+                    $"Element {i} differs. Expected:\n{expected}\nActual:\n{actual}"
+                );
             }
         }
 
         private static void AssertVectorApproximatelyEqual(Vector3 expected, Vector3 actual)
         {
-            Assert.That(Vector3.Distance(expected, actual), Is.LessThan(Tolerance),
-                $"Expected {expected} but was {actual}");
+            Assert.That(
+                Vector3.Distance(expected, actual),
+                Is.LessThan(Tolerance),
+                $"Expected {expected} but was {actual}"
+            );
         }
     }
 }

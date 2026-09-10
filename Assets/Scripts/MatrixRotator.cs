@@ -33,7 +33,7 @@ namespace Simulation
             var y = _rotationDegrees.y * Time.time;
             var z = _rotationDegrees.z * Time.time;
 
-            transform.rotation = MatrixTransformMath.Compute(x, y, z).rotation;
+            transform.rotation = MatrixTransformMath.ComputeRotationMatrix(x, y, z).rotation;
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Simulation
         /// </summary>
         public void Rotate()
         {
-            var stepMatrix = MatrixTransformMath.Compute(
+            var stepMatrix = MatrixTransformMath.ComputeRotationMatrix(
                 _rotationDegrees.x,
                 _rotationDegrees.y,
                 _rotationDegrees.z

@@ -11,8 +11,11 @@ namespace Simulation
         /// <summary>
         /// Computes the x, y, and z rotation matrices and returns the combined rotation matrix.
         /// </summary>
-        /// <returns>The combined rotation matrix</returns>
-        public static Matrix4x4 Compute(float x, float y, float z)
+        /// <param name="x">Amount to rotate about x-axis in degrees</param>
+        /// <param name="y">Amount to rotate about y-axis in degrees</param>
+        /// <param name="z">Amount to rotate about z-axis in degrees</param>
+        /// <returns>The combined transformation matrix for rotation</returns>
+        public static Matrix4x4 ComputeRotationMatrix(float x, float y, float z)
         {
             // Need to convert degrees to radians for Mathf.Sin/Cos computations.
             var radiansX = x * Mathf.Deg2Rad;
