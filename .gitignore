@@ -109,4 +109,4 @@ InitTestScene*.unity*
 *.slnx
 .idea
 
-/[Aa]ssets/Vendor/
+/[Aa]ssets/Vendor*
